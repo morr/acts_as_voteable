@@ -45,6 +45,14 @@ module Juixe
         def voted_by_user?(user)
           self.votes.any? { |v| user.id == v.user_id }
         end
+
+        def voted_yes?(user)
+          self.votes.any? { |v| user.id == v.user_id && v.voting }
+        end
+
+        def voted_no?(user)
+          self.votes.any? { |v| user.id == v.user_id && !v.voting }
+        end
       end
     end
   end
