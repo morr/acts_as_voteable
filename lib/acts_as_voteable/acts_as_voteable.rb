@@ -25,33 +25,37 @@ module Juixe
 
       # This module contains instance methods
       module InstanceMethods
+        def cached_votes
+          @cached_votes ||= self.votes.all
+        end
+
         def votes_for
-          self.votes.for.size
+          self.cached_votes.select {|v| v.voting }.size
         end
 
         def votes_against
-          self.votes.against.size
+          self.cached_votes.select {|v| !v.voting }.size
         end
 
         # Same as voteable.votes.size
         def votes_count
-          self.votes.size
+          self.cached_votes.size
         end
 
         def users_who_voted
-          self.votes.map(&:user)
+          self.cached_votes.map(&:user)
         end
 
         def voted_by_user?(user)
-          self.votes.any? { |v| user.id == v.user_id }
+          self.cached_votes.any? { |v| user.id == v.user_id }
         end
 
         def voted_yes?(user)
-          self.votes.any? { |v| user.id == v.user_id && v.voting }
+          self.cached_votes.any? { |v| user.id == v.user_id && v.voting }
         end
 
         def voted_no?(user)
-          self.votes.any? { |v| user.id == v.user_id && !v.voting }
+          self.cached_votes.any? { |v| user.id == v.user_id && !v.voting }
         end
       end
     end
