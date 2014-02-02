@@ -26,7 +26,7 @@ module Juixe
       # This module contains instance methods
       module InstanceMethods
         def cached_votes
-          @cached_votes ||= self.votes.all
+          @cached_votes ||= self.votes.to_a
         end
 
         def votes_for
